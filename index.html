@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>1 v 1</h1>
+</body>
+<script>
+    // Função para calcular a probabilidade de vitória com base na diferença de rating
+    function probabilidadeVitoria(ratingJogador1, ratingJogador2) {
+        return 1 / (1 + Math.pow(10, (ratingJogador2 - ratingJogador1) / 400));
+    }
+
+    // Função para atualizar as pontuações Elo após uma partida
+    function atualizarElo(ratingJogador1, ratingJogador2, resultadoJogador1) {
+        var K = 32; // Fator de escala (pode ser ajustado conforme necessário)
+        var probabilidadeJogador1 = probabilidadeVitoria(ratingJogador1, ratingJogador2);
+        var resultadoJogador2 = 1 - resultadoJogador1;
+        var novoRatingJogador1 = ratingJogador1 + K * (resultadoJogador1 - probabilidadeJogador1);
+        var novoRatingJogador2 = ratingJogador2 + K * (resultadoJogador2 - (1 - probabilidadeJogador1));
+        return [novoRatingJogador1, novoRatingJogador2];
+    }
+
+    // Função para calcular a probabilidade de vitória de uma equipe sobre outra
+    function probabilidadeVitoriaEquipe(ratingsEquipe1, ratingsEquipe2) {
+        var somaRatingsEquipe1 = ratingsEquipe1.reduce((total, rating) => total + rating, 0);
+        var somaRatingsEquipe2 = ratingsEquipe2.reduce((total, rating) => total + rating, 0);
+        var probabilidadeEquipe1 = probabilidadeVitoria(somaRatingsEquipe1, somaRatingsEquipe2);
+        return probabilidadeEquipe1;
+    }
+
+    // Função para atualizar as pontuações Elo de uma equipe após uma partida
+    function atualizarEloEquipe(ratingsEquipe1, ratingsEquipe2, resultadoEquipe1) {
+        var novosRatings = [];
+        var resultadoEquipe2 = 1 - resultadoEquipe1;
+        for (var i = 0; i < ratingsEquipe1.length; i++) {
+            var K = 32; // Fator de escala (pode ser ajustado conforme necessário)
+            var probabilidadeEquipe1 = probabilidadeVitoriaEquipe(ratingsEquipe1, ratingsEquipe2);
+            var novoRating = ratingsEquipe1[i] + K * (resultadoEquipe1 - probabilidadeEquipe1);
+            novosRatings.push(novoRating);
+        }
+        return novosRatings;
+    }
+
+    // Função para separar os times de forma equilibrada com base nos ratings
+    function separarTimes(jogadores) {
+        // Ordenar jogadores por rating
+        jogadores.sort((a, b) => a.rating - b.rating);
+        var meio = Math.ceil(jogadores.length / 2);
+        var time1 = jogadores.slice(0, meio);
+        var time2 = jogadores.slice(meio);
+        console.log(time1)
+        console.log(time2)
+        return [time1, time2];
+    }
+
+    // Exemplo de uso
+    var jogadores = [
+        { nome: "Jogador 1", rating: 800 },
+        { nome: "Jogador 2", rating: 850 },
+        { nome: "Jogador 3", rating: 820 },
+        { nome: "Jogador 4", rating: 830 },
+        { nome: "Jogador 5", rating: 1130 },
+    ];
+
+    var [time1, time2] = separarTimes(jogadores);
+    var resultadoEquipe1 = 1; // 1 para vitória da equipe 1, 0 para vitória da equipe 2
+    var novosRatingsTime1 = atualizarEloEquipe(time1.map(jogador => jogador.rating), time2.map(jogador => jogador.rating), resultadoEquipe1);
+    var novosRatingsTime2 = atualizarEloEquipe(time2.map(jogador => jogador.rating), time1.map(jogador => jogador.rating), 1 - resultadoEquipe1);
+
+    console.log("Novos ratings do Time 1:");
+    time1.forEach((jogador, index) => {
+        console.log(jogador.nome + ":", novosRatingsTime1[index]);
+    });
+
+    console.log("\nNovos ratings do Time 2:");
+    time2.forEach((jogador, index) => {
+        console.log(jogador.nome + ":", novosRatingsTime2[index]);
+    });
+</script>
+
+</html>
