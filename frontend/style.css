@@ -68,6 +68,7 @@ input {
 }
 
 #selectBar {
+    z-index: 999;
     display: none;
     width: 100%;
     position: absolute;
@@ -84,4 +85,39 @@ input {
     display: inline-block;
     width: 100%;
     cursor: pointer;
+}
+
+.centered {
+    text-align: center;
+}
+
+.fw9 {
+    font-weight: 900;
+}
+
+#winnerSelector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-between;
+}
+
+#winnerSelector button {
+    width: 48%;
+}
+
+#searchBarControll {
+    position: relative;
+    width: 100%;
+}
+
+#newPlayer {
+    width: 100%;
+}
+
+#clear {
+    padding: 11px 15px;
+    right: 0px;
+    position: absolute;
+    display: inline;
 }

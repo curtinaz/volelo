@@ -24,13 +24,15 @@
                 <div>
                     <label for="newPlayer">Adicionar jogador(a)</label>
                     <div class="inputButton">
-                        <input type="text" id="newPlayer">
+                        <div id="searchBarControll">
+                            <input type="text" id="newPlayer">
+                            <button id="clear" onclick="clearSearch()">X</button>
+                        </div>
                         <button id="submit">Pesquisar</button>
                     </div>
                 </div>
-                <div id="selectBar">
-                    <span>teste</span>
-                </div>
+
+                <div id="selectBar"></div>
 
                 <br>
 
@@ -43,17 +45,30 @@
             </div><br>
 
             <div id="playerBoard">
-                <ul id="team1"></ul>
-                <ul id="team2"></ul>
+                <div>
+                    <p id="team1Rating" class="fw9"></p>
+                    <ul id="team1"></ul>
+                </div>
+                <div>
+                    <p id="team2Rating" class="fw9"></p>
+                    <ul id="team2"></ul>
+                </div>
+            </div>
+
+            <div id="winnerSelector" style="display: none;">
+                <button onclick="selectWinner(1)">Time 1</button>
+                <button onclick="selectWinner(2)">Time 2</button>
             </div>
         </div>
     </section>
 </body>
 
 <script type="module">
-    import { searchPlayer } from './ajax/users.js';
+    import { searchPlayer, balanceTeam, updateElo } from './ajax/users.js';
 
     var possibilities = [];
+    var team1 = [];
+    var team2 = [];
 
     // Toda vez que digitar algo no buscador
     $("#submit").click(e => {
@@ -63,27 +78,20 @@
             if (data.length > 0) {
                 var selectHtml = '';
                 for (var player of data) {
-                    // evita exibir quem já foi adicionado
-                    // if (possibilities.find(x => x.id = player.id)) {
-                    //     continue
-                    // }
-
-                    var _thisPlayerHtml = `<span onclick="addPlayer('${player.name}', ${player.id})" class="selectItem">${player.name}</span>`;
+                    var _thisPlayerHtml = `<span onclick="addPlayer('${player.name}', ${player.id}, ${player.rating})" class="selectItem">${player.name} (${player.rating.toFixed(0)})</span>`;
                     selectHtml += _thisPlayerHtml;
                 }
 
                 $("#selectBar").html(selectHtml);
                 $("#selectBar").show(200);
             }
-
-            console.log(data);
         }, err => {
             console.log(err)
         })
     });
 
 
-    function addPlayer(name, id) {
+    function addPlayer(name, id, rating) {
         if (possibilities.find(x => x.id == id)) {
             $("#selectBar").hide(200);
             return;
@@ -93,45 +101,33 @@
 
         possibilities.push({
             id,
-            name
+            name,
+            rating
         });
 
         refreshPossibilites();
     }
     window.addPlayer = addPlayer;
 
-    // shuffler.addEventListener('click', e => {
-    //     e.preventDefault();
-
-    //     var shufflePossibilites = shuffle(possibilities);
-
-    //     document.querySelector("#team1").innerHTML = '';
-    //     document.querySelector("#team2").innerHTML = '';
-
-    //     var index = 0;
-    //     for (var p of shufflePossibilites) {
-    //         if (index % 2 == 0) {
-    //             document.querySelector("#team1").innerHTML += `<li>${p}</li>`
-    //         } else {
-    //             document.querySelector("#team2").innerHTML += `<li>${p}</li>`
-    //         }
-    //         index++;
-    //     }
-    // })
-
     function refreshPossibilites() {
         document.querySelector("#possibilities").innerHTML = 'Jogadores:';
         var index = 0;
         for (var p of possibilities) {
             if (index == 0) {
-                document.querySelector("#possibilities").innerHTML += ' ' + p.name;
+                document.querySelector("#possibilities").innerHTML += ` ${p.name} (${p.rating.toFixed(0)})`;
             } else {
-                document.querySelector("#possibilities").innerHTML += ', ' + p.name;
+                document.querySelector("#possibilities").innerHTML += `, ${p.name} (${p.rating.toFixed(0)})`;
             }
 
             index++;
         }
     }
+
+    function clearSearch() {
+        $("#newPlayer").val("");
+        $("#selectBar").hide(200);
+    }
+    window.clearSearch = clearSearch;
 
     function shuffle() {
         var expectedFormat = {
@@ -140,29 +136,86 @@
             })
         }
 
-        console.log(expectedFormat);
+        balanceTeam(expectedFormat, data => {
+            document.querySelector("#team1").innerHTML = '';
+            document.querySelector("#team2").innerHTML = '';
+
+            team1 = data.team1.players.map(function (player) {
+                return player.id;
+            });
+
+            team2 = data.team2.players.map(function (player) {
+                return player.id;
+            });
+
+            $("#team1Rating").html(`Time 1: ${data.team1.totalRating.toFixed(0)}`)
+            $("#team2Rating").html(`Time 2: ${data.team2.totalRating.toFixed(0)}`)
+
+            for (var p of data.team1.players) {
+                document.querySelector("#team1").innerHTML += `<li>${p.name} (${p.rating.toFixed(0)})</li>`
+            }
+            for (var p of data.team2.players) {
+                document.querySelector("#team2").innerHTML += `<li>${p.name} (${p.rating.toFixed(0)})</li>`
+            }
+
+            $("#playerBoard").show(200);
+            $("#winnerSelector").show(200);
+
+        }, err => {
+            console.log(err);
+        })
     }
-    
+
     $("#shuffler").click(shuffle);
 
-    // function shuffle(array) {
-    //     let currentIndex = array.length, randomIndex;
 
-    //     // While there remain elements to shuffle.
-    //     while (currentIndex != 0) {
+    function showPlayers(array) {
+        let currentIndex = array.length, randomIndex;
 
-    //         // Pick a remaining element.
-    //         randomIndex = Math.floor(Math.random() * currentIndex);
-    //         currentIndex--;
+        // While there remain elements to shuffle.
+        while (currentIndex != 0) {
 
-    //         // And swap it with the current element.
-    //         [array[currentIndex], array[randomIndex]] = [
-    //             array[randomIndex], array[currentIndex]];
-    //     }
+            // Pick a remaining element.
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
 
-    //     return array;
-    // }
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+        }
 
+        return array;
+    }
+
+    function selectWinner(team) {
+        var match = {
+            team1,
+            team2,
+            "winner": team
+        };
+
+        updateElo(match, data => {
+
+            data.forEach(function (team, index) {
+                team.forEach(function (player) {
+                    var existingPlayer = possibilities.find(function (p) {
+                        return p.id === player.id;
+                    });
+                    if (existingPlayer) {
+                        existingPlayer.rating = player.rating;
+                    }
+                });
+            });
+
+            $("#playerBoard").hide(200);
+            $("#winnerSelector").hide(200);
+            refreshPossibilites();
+        }, err => {
+            console.log(err);
+        })
+    }
+
+    window.selectWinner = selectWinner;
 
 </script>
 
