@@ -1,4 +1,5 @@
-const backendBaseUrl = "https://127.0.0.1:5001"; // LOCAL
+const backendBaseUrl = "http://localhost:8000";
+
 
 function uploadFile(
   file,
@@ -105,14 +106,15 @@ function get(
   data, //ex: { ajaxid: 4, UserID: UserID, EmailAddress: EmailAddress }
   successFunction,
   errorFunction,
-  requiredAuthentication = false
+  requiredAuthentication = false,
+  headers
 ) {
   $.ajax({
     url: backendBaseUrl + url,
     type: "get",
     data: data,
     dataType: 'json',
-    headers: getHeaders(requiredAuthentication),
+    headers: headers ? headers : getHeaders(requiredAuthentication),
     success: successFunction,
     error: (error) => {
       if (error.status == 401 || error.status == 0) {

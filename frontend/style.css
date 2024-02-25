@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Oswald&family=Roboto:wght@100;300;500&display=swap');
+
+* {
+    box-sizing: border-box;
+    font-family: roboto;
+}
+
+:root {
+    --color-main: #24597e;
+    --background: #ffffff;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: var(--background);
+}
+
+section {
+    width: 600px;
+}
+
+h2 {
+    color: var(--color-main);
+}
+
+button {
+    background-color: var(--color-main);
+    color: #fff;
+    border-style: none;
+    border-radius: 15px;
+    cursor: pointer;
+    padding: 10px 15px;
+}
+
+p {
+    color: rgb(81, 81, 81);
+}
+
+input {
+    border: 1px solid rgb(81, 81, 81);
+    border-radius: 15px;
+    background-color: var(--background);
+    padding: 10px 15px;
+}
+
+.form_control {
+    display: flex;
+    flex-direction: column;
+    color: rgb(81, 81, 81);
+}
+
+.inputButton {
+    margin-top: 10px;
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 8fr 2fr;
+    grid-column-gap: 10px;
+}
+
+#playerBoard {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px;
+    color: var(--color-main);
+}
