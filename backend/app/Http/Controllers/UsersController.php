@@ -18,6 +18,15 @@ class UsersController extends Controller
         return $users;
     }
 
+    public function newUser(Request $req) {
+        $user = User::create([
+            "name" => $req->name,
+        ]);
+
+        $user->save();
+        return $user;
+    }
+
     public static function balancer(Request $req) {
         $players = [];
         for ($i = 0; $i < count($req->players); $i++) {
