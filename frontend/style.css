@@ -45,6 +45,7 @@ input {
 }
 
 .form_control {
+    position: relative;
     display: flex;
     flex-direction: column;
     color: rgb(81, 81, 81);
@@ -64,4 +65,23 @@ input {
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 10px;
     color: var(--color-main);
+}
+
+#selectBar {
+    display: none;
+    width: 100%;
+    position: absolute;
+    top: 80px;
+    padding: 20px;
+    border-radius: 4px;
+    background: #24597e;
+    color: white;
+}
+
+.selectItem {
+    background: #ffffff1a;
+    padding: 12px;
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
 }

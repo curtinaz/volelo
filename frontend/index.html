@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volelo</title>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -14,12 +21,21 @@
 
         <div>
             <div class="form_control">
-                <label for="newPlayer">Adicionar jogador(a)</label>
-                <div class="inputButton">
-                    <input type="text" id="newPlayer">
-                    <button id="submit">Adicionar</button>
-                </div><br>
+                <div>
+                    <label for="newPlayer">Adicionar jogador(a)</label>
+                    <div class="inputButton">
+                        <input type="text" id="newPlayer">
+                        <button id="submit">Pesquisar</button>
+                    </div>
+                </div>
+                <div id="selectBar">
+                    <span>teste</span>
+                </div>
+
+                <br>
+
                 <button id="shuffler">Embaralhar</button>
+
             </div>
 
             <div>
@@ -35,98 +51,119 @@
 </body>
 
 <script type="module">
+    import { searchPlayer } from './ajax/users.js';
 
-import {searchPlayer} from './ajax/users.js';
+    var possibilities = [];
 
-// Toda vez que digitar algo no buscador
-$("#submit").click(e => {
-    e.preventDefault();
-    var searching = $("#newPlayer").val();
-    searchPlayer(searching, data => {
-        console.log(data);
-    }, err => {
-        console.log(err)
-    })
-});
+    // Toda vez que digitar algo no buscador
+    $("#submit").click(e => {
+        e.preventDefault();
+        var searching = $("#newPlayer").val();
+        searchPlayer(searching, data => {
+            if (data.length > 0) {
+                var selectHtml = '';
+                for (var player of data) {
+                    // evita exibir quem já foi adicionado
+                    // if (possibilities.find(x => x.id = player.id)) {
+                    //     continue
+                    // }
 
-var possibilities = [];
+                    var _thisPlayerHtml = `<span onclick="addPlayer('${player.name}', ${player.id})" class="selectItem">${player.name}</span>`;
+                    selectHtml += _thisPlayerHtml;
+                }
 
-var shuffleForm = document.querySelector("#shuffle");
-var shuffler = document.querySelector("#shuffler");
+                $("#selectBar").html(selectHtml);
+                $("#selectBar").show(200);
+            }
 
-// shuffleForm.addEventListener('submit', e => {
-//     e.preventDefault();
+            console.log(data);
+        }, err => {
+            console.log(err)
+        })
+    });
 
-//     var player = document.querySelector("#newPlayer");
 
-//     if (player.value == '') {
-//         window.alert('Nenhum jogador foi adicionado')
-//         return;
-//     }
+    function addPlayer(name, id) {
+        if (possibilities.find(x => x.id == id)) {
+            $("#selectBar").hide(200);
+            return;
+        }
 
-//     if (possibilities.indexOf(player.value) >= 0) {
-//         window.alert('Essa pessoa já foi adicionada!')
-//         player.value = '';
-//         return;
-//     }
+        $("#selectBar").hide(200);
 
-//     possibilities.push(player.value);
-//     player.value = '';
+        possibilities.push({
+            id,
+            name
+        });
 
-//     refreshPossibilites();
+        refreshPossibilites();
+    }
+    window.addPlayer = addPlayer;
 
-// });
+    // shuffler.addEventListener('click', e => {
+    //     e.preventDefault();
 
-// shuffler.addEventListener('click', e => {
-//     e.preventDefault();
+    //     var shufflePossibilites = shuffle(possibilities);
 
-//     var shufflePossibilites = shuffle(possibilities);
+    //     document.querySelector("#team1").innerHTML = '';
+    //     document.querySelector("#team2").innerHTML = '';
 
-//     document.querySelector("#team1").innerHTML = '';
-//     document.querySelector("#team2").innerHTML = '';
+    //     var index = 0;
+    //     for (var p of shufflePossibilites) {
+    //         if (index % 2 == 0) {
+    //             document.querySelector("#team1").innerHTML += `<li>${p}</li>`
+    //         } else {
+    //             document.querySelector("#team2").innerHTML += `<li>${p}</li>`
+    //         }
+    //         index++;
+    //     }
+    // })
 
-//     var index = 0;
-//     for (var p of shufflePossibilites) {
-//         if (index % 2 == 0) {
-//             document.querySelector("#team1").innerHTML += `<li>${p}</li>`
-//         } else {
-//             document.querySelector("#team2").innerHTML += `<li>${p}</li>`
-//         }
-//         index++;
-//     }
-// })
+    function refreshPossibilites() {
+        document.querySelector("#possibilities").innerHTML = 'Jogadores:';
+        var index = 0;
+        for (var p of possibilities) {
+            if (index == 0) {
+                document.querySelector("#possibilities").innerHTML += ' ' + p.name;
+            } else {
+                document.querySelector("#possibilities").innerHTML += ', ' + p.name;
+            }
 
-// function refreshPossibilites() {
-//     document.querySelector("#possibilities").innerHTML = 'Jogadores:';
-//     index = 0;
-//     for (var p of possibilities) {
-//         if (index == 0) {
-//             document.querySelector("#possibilities").innerHTML += ' ' + p;
-//         } else {
-//             document.querySelector("#possibilities").innerHTML += ', ' + p;
-//         }
+            index++;
+        }
+    }
 
-//         index++;
-//     }
-// }
+    function shuffle() {
+        var expectedFormat = {
+            "players": possibilities.map(function (item) {
+                return { "id": item.id };
+            })
+        }
 
-// function shuffle(array) {
-//     let currentIndex = array.length, randomIndex;
+        console.log(expectedFormat);
+    }
+    
+    $("#shuffler").click(shuffle);
 
-//     // While there remain elements to shuffle.
-//     while (currentIndex != 0) {
+    // function shuffle(array) {
+    //     let currentIndex = array.length, randomIndex;
 
-//         // Pick a remaining element.
-//         randomIndex = Math.floor(Math.random() * currentIndex);
-//         currentIndex--;
+    //     // While there remain elements to shuffle.
+    //     while (currentIndex != 0) {
 
-//         // And swap it with the current element.
-//         [array[currentIndex], array[randomIndex]] = [
-//             array[randomIndex], array[currentIndex]];
-//     }
+    //         // Pick a remaining element.
+    //         randomIndex = Math.floor(Math.random() * currentIndex);
+    //         currentIndex--;
 
-//     return array;
-// }
+    //         // And swap it with the current element.
+    //         [array[currentIndex], array[randomIndex]] = [
+    //             array[randomIndex], array[currentIndex]];
+    //     }
+
+    //     return array;
+    // }
+
+
 </script>
 
 </html>
