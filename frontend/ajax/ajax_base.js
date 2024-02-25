@@ -1,4 +1,4 @@
-const backendBaseUrl = "https://vn67nn8upe.execute-api.us-east-1.amazonaws.com/api";
+const backendBaseUrl = "https://vn67nn8upe.execute-api.us-east-1.amazonaws.com";
 
 
 function uploadFile(
