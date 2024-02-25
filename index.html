@@ -61,27 +61,54 @@
 
     // Exemplo de uso
     var jogadores = [
-        { id: 0, nome: "Jogador 1", rating: 800 },
-        { id: 1, nome: "Jogador 2", rating: 850 },
-        { id: 2, nome: "Jogador 3", rating: 820 },
-        { id: 3, nome: "Jogador 4", rating: 830 },
-        { id: 4, nome: "Jogador 5", rating: 1130 },
+        { id: 0, nome: "Cris", rating: 800 },
+        { id: 1, nome: "Laura", rating: 800 },
+        { id: 2, nome: "Rodrigo", rating: 800 },
+        { id: 3, nome: "Barrojão", rating: 800 },
+        { id: 4, nome: "Carlão", rating: 800 },
+        { id: 5, nome: "Jogador 1", rating: 800 },
+        { id: 6, nome: "Jogador 2", rating: 800 },
+        { id: 7, nome: "Jogador 3", rating: 800 },
+        { id: 8, nome: "Jogador 4", rating: 800 },
+        { id: 9, nome: "Jogador 5", rating: 800 }
     ];
 
     var [time1, time2] = separarTimes(jogadores);
-    var resultadoEquipe1 = 1; // 1 para vitória da equipe 1, 0 para vitória da equipe 2
+    var resultadoEquipe1 = 0; // 1 para vitória da equipe 1, 0 para vitória da equipe 2
     var novosRatingsTime1 = atualizarEloEquipe(time1.map(jogador => jogador.rating), time2.map(jogador => jogador.rating), resultadoEquipe1);
     var novosRatingsTime2 = atualizarEloEquipe(time2.map(jogador => jogador.rating), time1.map(jogador => jogador.rating), 1 - resultadoEquipe1);
 
+
     console.log("Novos ratings do Time 1:");
     time1.forEach((jogador, index) => {
+        jogador.rating = novosRatingsTime1[index];
         console.log(jogador.nome + ":", novosRatingsTime1[index]);
     });
 
     console.log("\nNovos ratings do Time 2:");
     time2.forEach((jogador, index) => {
+        jogador.rating = novosRatingsTime2[index];
         console.log(jogador.nome + ":", novosRatingsTime2[index]);
     });
+
+    console.log(time1);
+
+    var novosRatingsTime1 = atualizarEloEquipe(time1.map(jogador => jogador.rating), time2.map(jogador => jogador.rating), resultadoEquipe1);
+    var novosRatingsTime2 = atualizarEloEquipe(time2.map(jogador => jogador.rating), time1.map(jogador => jogador.rating), 1 - resultadoEquipe1);
+
+
+    console.log("Novos ratings do Time 1:");
+    time1.forEach((jogador, index) => {
+        jogador.rating = novosRatingsTime1[index];
+        console.log(jogador.nome + ":", novosRatingsTime1[index]);
+    });
+
+    console.log("\nNovos ratings do Time 2:");
+    time2.forEach((jogador, index) => {
+        jogador.rating = novosRatingsTime2[index];
+        console.log(jogador.nome + ":", novosRatingsTime2[index]);
+    });
+
 </script>
 
 </html>
