@@ -121,3 +121,17 @@ input {
     position: absolute;
     display: inline;
 }
+
+section#principal:before {
+    content: '';
+    background-image: url(foto.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    width: 100vw;
+    background-size: 500px;
+    background-position: center 373px;
+    opacity: 50%;
+}
