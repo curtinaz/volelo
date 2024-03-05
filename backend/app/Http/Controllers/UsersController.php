@@ -138,4 +138,11 @@ class UsersController extends Controller
         }
         return $novosRatings;
     }
+
+    public function eloRanking()
+    {
+        $users = User::orderBy('rating', 'desc')->get(['rating', 'name']);
+        return response($users);
+
+    }
 }
