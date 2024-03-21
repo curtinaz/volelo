@@ -134,4 +134,5 @@ section#principal:before {
     background-size: 500px;
     background-position: center 373px;
     opacity: 50%;
+    z-index: -5;
 }
