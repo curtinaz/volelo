@@ -98,6 +98,7 @@ class UsersController extends Controller
             $jogador['rating'] = $novosRatingsTime1[$index];
             $dbPlayer = User::find($jogador['id']);
             $dbPlayer->rating = $novosRatingsTime1[$index];
+            $dbPlayer->playedMatches++;
             $dbPlayer->save();
         }
 
@@ -105,6 +106,7 @@ class UsersController extends Controller
             $jogador['rating'] = $novosRatingsTime2[$index];
             $dbPlayer = User::find($jogador['id']);
             $dbPlayer->rating = $novosRatingsTime2[$index];
+            $dbPlayer->playedMatches++;
             $dbPlayer->save();
         }
 
