@@ -24,4 +24,12 @@ function updateElo(match, successFunction, errorFunction) {
   );
 }
 
-export { searchPlayer, balanceTeam, updateElo };
+function getRanking(perPage = 10, page = 1, successFunction, errorFunction) {
+  get(`/api/users/ranking?perPage=${perPage}&page=${page}`, {},
+    successFunction,
+    errorFunction,
+    false,
+  );
+};
+
+export { searchPlayer, balanceTeam, updateElo, getRanking };
