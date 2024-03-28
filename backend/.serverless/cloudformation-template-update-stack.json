@@ -71,10 +71,10 @@
         }
       }
     },
-    "WebLogGroup": {
+    "ApiLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/laravel-dev-web"
+        "LogGroupName": "/aws/lambda/volelo-dev-api"
       }
     },
     "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "laravel",
+                  "volelo",
                   "dev",
                   "lambda"
                 ]
@@ -120,7 +120,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/laravel-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/volelo-dev*:*"
                     }
                   ]
                 },
@@ -131,7 +131,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/laravel-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/volelo-dev*:*:*"
                     }
                   ]
                 }
@@ -144,7 +144,7 @@
           "Fn::Join": [
             "-",
             [
-              "laravel",
+              "volelo",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -155,18 +155,18 @@
         }
       }
     },
-    "WebLambdaFunction": {
+    "ApiLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/laravel/dev/1708899762336-2024-02-25T22:22:42.336Z/laravel.zip"
+          "S3Key": "serverless/volelo/dev/1711660751534-2024-03-28T21:19:11.534Z/volelo.zip"
         },
         "Handler": "public/index.php",
         "Runtime": "provided.al2",
-        "FunctionName": "laravel-dev-web",
+        "FunctionName": "volelo-dev-api",
         "MemorySize": 1024,
         "Timeout": 28,
         "Role": {
@@ -176,27 +176,27 @@
           ]
         },
         "Layers": [
-          "arn:aws:lambda:us-east-1:534081306603:layer:php-81-fpm:72"
+          "arn:aws:lambda:us-east-1:534081306603:layer:php-81-fpm:62"
         ]
       },
       "DependsOn": [
-        "WebLogGroup"
+        "ApiLogGroup"
       ]
     },
-    "WebLambdaVersionGtMjS1OvLtBJwkqgBZO5NXHsJGjBSOtZqpm6jwc": {
+    "ApiLambdaVersionn5lfWRUJQgFQzeZ80PzqTgVvK9n9CiIhuhqtf1vw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "WebLambdaFunction"
+          "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "ZPyxYuULVJ9GFsm7Y0W7e7WjtWBIuOh5xiAU80dJMNY="
+        "CodeSha256": "n2+T6YTQY7QOOM1DD6eT1/polsf2WEpyG8aZy428Hr0="
       }
     },
     "HttpApi": {
       "Type": "AWS::ApiGatewayV2::Api",
       "Properties": {
-        "Name": "dev-laravel",
+        "Name": "dev-volelo",
         "ProtocolType": "HTTP"
       }
     },
@@ -213,12 +213,12 @@
         }
       }
     },
-    "WebLambdaPermissionHttpApi": {
+    "ApiLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "WebLambdaFunction",
+            "ApiLambdaFunction",
             "Arn"
           ]
         },
@@ -250,7 +250,7 @@
         }
       }
     },
-    "HttpApiIntegrationWeb": {
+    "HttpApiIntegrationApi": {
       "Type": "AWS::ApiGatewayV2::Integration",
       "Properties": {
         "ApiId": {
@@ -259,7 +259,7 @@
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
           "Fn::GetAtt": [
-            "WebLambdaFunction",
+            "ApiLambdaFunction",
             "Arn"
           ]
         },
@@ -280,13 +280,13 @@
             [
               "integrations",
               {
-                "Ref": "HttpApiIntegrationWeb"
+                "Ref": "HttpApiIntegrationApi"
               }
             ]
           ]
         }
       },
-      "DependsOn": "HttpApiIntegrationWeb"
+      "DependsOn": "HttpApiIntegrationApi"
     }
   },
   "Outputs": {
@@ -295,16 +295,16 @@
         "Ref": "ServerlessDeploymentBucket"
       },
       "Export": {
-        "Name": "sls-laravel-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-volelo-dev-ServerlessDeploymentBucketName"
       }
     },
-    "WebLambdaFunctionQualifiedArn": {
+    "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "WebLambdaVersionGtMjS1OvLtBJwkqgBZO5NXHsJGjBSOtZqpm6jwc"
+        "Ref": "ApiLambdaVersionn5lfWRUJQgFQzeZ80PzqTgVvK9n9CiIhuhqtf1vw"
       },
       "Export": {
-        "Name": "sls-laravel-dev-WebLambdaFunctionQualifiedArn"
+        "Name": "sls-volelo-dev-ApiLambdaFunctionQualifiedArn"
       }
     },
     "HttpApiId": {
@@ -313,7 +313,7 @@
         "Ref": "HttpApi"
       },
       "Export": {
-        "Name": "sls-laravel-dev-HttpApiId"
+        "Name": "sls-volelo-dev-HttpApiId"
       }
     },
     "HttpApiUrl": {
@@ -338,7 +338,7 @@
         ]
       },
       "Export": {
-        "Name": "sls-laravel-dev-HttpApiUrl"
+        "Name": "sls-volelo-dev-HttpApiUrl"
       }
     }
   }
