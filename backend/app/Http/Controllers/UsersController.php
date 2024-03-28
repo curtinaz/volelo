@@ -142,7 +142,7 @@ class UsersController extends Controller
     public function eloRanking(Request $req)
     {
         $perPage = $req->perPage ?? 10;
-        $users = User::orderBy('rating','desc')->paginate($perPage, ['rating', 'name']);
+        $users = User::where("playedMatches", ">=", "5")->orderBy('rating','desc')->paginate($perPage, ['rating', 'name']);
         return response($users);
     }
 }
