@@ -1,4 +1,4 @@
-service: laravel
+service: volelo
 
 provider:
     name: aws
@@ -20,7 +20,7 @@ package:
 
 functions:
     # This function runs the Laravel website/API
-    web:
+    api:
         handler: public/index.php
         timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
         layers:
