@@ -99,6 +99,14 @@ class UsersController extends Controller
             $dbPlayer = User::find($jogador['id']);
             $dbPlayer->rating = $novosRatingsTime1[$index];
             $dbPlayer->playedMatches++;
+
+            // Adiciona se venceu ou perdeu no banco de dados
+            if($resultadoEquipe1 == 1) {
+                $dbPlayer->matchesWon++;
+            } else {
+                $dbPlayer->matchesLost++;
+            }
+
             $dbPlayer->save();
         }
 
@@ -107,6 +115,14 @@ class UsersController extends Controller
             $dbPlayer = User::find($jogador['id']);
             $dbPlayer->rating = $novosRatingsTime2[$index];
             $dbPlayer->playedMatches++;
+
+            // Adiciona se venceu ou perdeu no banco de dados
+            if($resultadoEquipe1 == 0) {
+                $dbPlayer->matchesWon++;
+            } else {
+                $dbPlayer->matchesLost++;
+            }
+
             $dbPlayer->save();
         }
 
@@ -144,7 +160,7 @@ class UsersController extends Controller
     public function eloRanking(Request $req)
     {
         $perPage = $req->perPage ?? 10;
-        $users = User::where("playedMatches", ">=", "5")->orderBy('rating','desc')->paginate($perPage, ['rating', 'name']);
+        $users = User::where("playedMatches", ">=", "5")->orderBy('rating','desc')->paginate($perPage, ['rating', 'name', 'matchesWon', 'matchesLost']);
         return response($users);
     }
 }

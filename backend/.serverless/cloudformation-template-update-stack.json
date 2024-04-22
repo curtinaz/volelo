@@ -162,7 +162,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/volelo/dev/1711666811654-2024-03-28T23:00:11.654Z/volelo.zip"
+          "S3Key": "serverless/volelo/dev/1711668454269-2024-03-28T23:27:34.269Z/volelo.zip"
         },
         "Handler": "public/index.php",
         "Runtime": "provided.al2",
@@ -183,14 +183,14 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersionf53pgqrv1NQX8pLuSJzoekKr54BZMpcgGtrp9DJ7HV4": {
+    "ApiLambdaVersionFMcZc54CDtWOqszAWnenlKRBJQuORvu38BeQYnEk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "UhtQXjSULvAVLa1yVx5UPB6sIZygmRd3mTZN8mt00Eg="
+        "CodeSha256": "J7+rv9u/Cy0rzKwehmh6K0NDO8GGDujGuGvCpQ9cZrY="
       }
     },
     "HttpApi": {
@@ -301,7 +301,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersionf53pgqrv1NQX8pLuSJzoekKr54BZMpcgGtrp9DJ7HV4"
+        "Ref": "ApiLambdaVersionFMcZc54CDtWOqszAWnenlKRBJQuORvu38BeQYnEk"
       },
       "Export": {
         "Name": "sls-volelo-dev-ApiLambdaFunctionQualifiedArn"
