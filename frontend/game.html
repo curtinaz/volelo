@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -67,6 +68,7 @@
     import { searchPlayer, balanceTeam, updateElo } from './ajax/users.js';
 
     var possibilities = [];
+    window.possibilities = possibilities;
     var team1 = [];
     var team2 = [];
 
@@ -93,11 +95,11 @@
 
     function addPlayer(name, id, rating) {
         if (possibilities.find(x => x.id == id)) {
-            $("#selectBar").hide(200);
+            // $("#selectBar").hide(200);
             return;
         }
 
-        $("#selectBar").hide(200);
+        // $("#selectBar").hide(200);
 
         possibilities.push({
             id,
@@ -109,14 +111,27 @@
     }
     window.addPlayer = addPlayer;
 
+    function removePlayer(idParaRemover) {
+        // Encontrar o índice do objeto com o ID especificado
+        var removingIndex = possibilities.findIndex(x => x.id == idParaRemover)
+
+        // Se o índice for encontrado (diferente de -1), remover o objeto usando splice
+        if (removingIndex !== -1) {
+            possibilities.splice(removingIndex, 1);
+        }
+
+        refreshPossibilites();
+    }
+    window.removePlayer = removePlayer;
+
     function refreshPossibilites() {
         document.querySelector("#possibilities").innerHTML = 'Jogadores:';
         var index = 0;
         for (var p of possibilities) {
             if (index == 0) {
-                document.querySelector("#possibilities").innerHTML += ` ${p.name} (${p.rating.toFixed(0)})`;
+                document.querySelector("#possibilities").innerHTML += ` ${p.name} (${p.rating.toFixed(0)}) <box-icon name='x' onclick="removePlayer('${p.id}')"></box-icon>`;
             } else {
-                document.querySelector("#possibilities").innerHTML += `, ${p.name} (${p.rating.toFixed(0)})`;
+                document.querySelector("#possibilities").innerHTML += `, ${p.name} (${p.rating.toFixed(0)}) <box-icon name='x' onclick="removePlayer('${p.id}')"></box-icon>`;
             }
 
             index++;
