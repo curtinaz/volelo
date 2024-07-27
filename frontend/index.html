@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <link rel="icon" href="volei.png">
 
     <title>Volelo</title>
 
@@ -32,6 +32,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./game.html">Partida</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="isLoggedIn()">Criar Jogador</a>
                 </li>
             </ul>
         </div>
@@ -141,6 +144,16 @@
             console.log(err);
         });
 
+
+        function isLoggedIn(){
+            let login = localStorage.getItem("isLogged");
+
+            if(login === "true"){
+                window.location.href = "https://curtinaz.github.io/volelo/frontend/add-user.html";
+            } else {
+                window.location.href = "https://curtinaz.github.io/volelo/frontend/login.html";
+            }
+        }
     </script>
 
 </body>

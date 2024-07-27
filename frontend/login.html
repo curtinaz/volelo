@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="volei.png">
+    
+    <title>Volelo</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./dist/offcanvas.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Volelo</a>
+        <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse offcanvas-collapse justify-content-end" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Ranking <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./game.html">Partida</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="isLoggedIn()">Criar Jogador</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main role="main" class="container">
+        <form class="form-signin" onsubmit="return validation()">
+            <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+            <label for="name" class="sr-only">Name</label>
+            <input type="text" id="name" class="form-control" placeholder="Name" required autofocus>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        </form>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <script>
+        $(function () {
+            'use strict'
+            $('[data-toggle="offcanvas"]').on('click', function () {
+                $('.offcanvas-collapse').toggleClass('open')
+            })
+        });
+
+        function validation() {
+            const name = document.getElementById("name").value;
+            const password = document.getElementById("password").value;
+
+            if (name === "" || password === "") {
+                alert("Senha ou Nome não pode estar vazio");
+                return false;
+            }
+            
+            if (name === "admin" && password === "admin") {
+                window.location.href = "https://curtinaz.github.io/volelo/frontend/add-user.html";
+                localStorage.setItem('isLogged', JSON.stringify(true));
+                return false;
+            } else {
+                alert("Senha ou Nome errado");
+                return false;
+            }
+        }
+
+        function isLoggedIn(){
+            let login = localStorage.getItem("isLogged");
+
+            if(login === "true"){
+                window.location.href = "https://curtinaz.github.io/volelo/frontend/add-user.html";
+            } else {
+                window.location.href = "https://curtinaz.github.io/volelo/frontend/login.html";
+            }
+        }
+    </script>
+</body>
+
+</html>

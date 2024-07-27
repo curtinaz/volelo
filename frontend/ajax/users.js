@@ -32,4 +32,8 @@ function getRanking(perPage = 10, page = 1, successFunction, errorFunction) {
   );
 };
 
+function newUser(username){
+  post(``)
+}
+
 export { searchPlayer, balanceTeam, updateElo, getRanking };
