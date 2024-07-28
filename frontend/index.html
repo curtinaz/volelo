@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <link rel="icon" href="volei.png">
 
     <title>Volelo</title>
 
@@ -20,20 +20,25 @@
 <body class="bg-light">
 
     <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Volelo</a>
-        <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="container">
+            <a class="navbar-brand" href="#">Volelo</a>
+            <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="navbar-collapse offcanvas-collapse justify-content-end" id="navbarsExampleDefault">
-            <ul class="navbar-nav mr-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Ranking <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="./game.html">Partida</a>
-                </li>
-            </ul>
+            <div class="navbar-collapse offcanvas-collapse justify-content-end" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Ranking <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./game.html">Partida</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./add-user.html">Criar Jogador</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -51,7 +56,8 @@
 
             <div>
                 <div class="d-flex align-items-center">
-                    <div class="mr-2"><strong id="top1Won" class="text-success"></strong>/<strong class="text-danger" id="top1Lost"></strong></div>
+                    <div class="mr-2"><strong id="top1Won" class="text-success"></strong>/<strong class="text-danger"
+                            id="top1Lost"></strong></div>
                     <img id="top1Elo" style="width: 35px" />
                 </div>
             </div>
@@ -141,6 +147,16 @@
             console.log(err);
         });
 
+
+        function isLoggedIn() {
+            let login = localStorage.getItem("isLogged");
+
+            if (login === "true") {
+                window.location.href = "https://curtinaz.github.io/volelo/frontend/add-user.html";
+            } else {
+                window.location.href = "https://curtinaz.github.io/volelo/frontend/login.html";
+            }
+        }
     </script>
 
 </body>

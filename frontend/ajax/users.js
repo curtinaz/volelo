@@ -32,4 +32,13 @@ function getRanking(perPage = 10, page = 1, successFunction, errorFunction) {
   );
 };
 
-export { searchPlayer, balanceTeam, updateElo, getRanking };
+function newUser(username, successFunction, errorFunction){
+  post(`/api/users`, {
+    name: username
+  }, 
+  successFunction, 
+  errorFunction, 
+  false)
+}
+
+export { searchPlayer, balanceTeam, updateElo, getRanking, newUser };
